@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparaison des Offres</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .moins-cher {
+            background-color: #ccffcc; /* Vert clair */
+        }
+
+        .total-container {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .frais-depart {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .total {
+            color: #007bff; /* Couleur bleue pour le total */
+        }
+
+        .total-difference {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745; /* Couleur verte pour le total le moins cher */
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+    <h1 class="text-center">Calculateur Chatel</h1><br>
+    <h3 class="text-center text-muted">Calculé sur 12 mois<br>Impose de lancer une portabilité vers un autre opérateur dès le début du 13<sup>e</sup> mois</h3><br>
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card" id="offre1">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5">Offre avec engagement</h2>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="prixTel1">Prix du téléphone:</label>
+                            <input type="number" class="form-control" id="prixTel1">
+                        </div>
+                        <div class="form-group">
+                            <label for="remise1">Remise:</label>
+                            <input type="number" class="form-control" id="remise1">
+                        </div>
+                        <div class="form-group">
+                            <label for="prixForfait1Periode1">Prix forfait mensuel première période:</label>
+                            <input type="number" class="form-control" id="prixForfait1Periode1">
+                        </div>
+                        <div class="form-group">
+                            <label for="dureePeriode1_1">Durée première période (mois):</label>
+                            <input type="number" class="form-control" id="dureePeriode1_1">
+                        </div>
+                        <div class="form-group">
+                            <label for="prixForfait2Periode1">Prix forfait mensuel deuxième période:</label>
+                            <input type="number" class="form-control" id="prixForfait2Periode1">
+                        </div>
+                        <div class="form-group">
+                            <label for="dureePeriode2_1">Durée deuxième période (mois):</label>
+                            <input type="number" class="form-control" id="dureePeriode2_1">
+                        </div>
+                        <div class="form-group">
+                            <label>Total:</label>
+                            <div class="total-container">
+                                <span id="total1" class="total">0</span> €
+                                <br>
+                                <small class="frais-depart">dont <span id="fraisDepart1">0</span> € de frais de départ</small>
+                            </div>
+                        </div>
+                        <div id="erreur1" class="text-danger"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card" id="offre2">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5">Offre mobile nu + forfait sans engagement</h2>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="prixTel2">Prix du téléphone:</label>
+                            <input type="number" class="form-control" id="prixTel2">
+                        </div>
+                        <div class="form-group">
+                            <label for="remise2">Remise:</label>
+                            <input type="number" class="form-control" id="remise2">
+                        </div>
+                        <div class="form-group">
+                            <label for="prixForfait1Periode2">Prix forfait mensuel:</label>
+                            <input type="number" class="form-control" id="prixForfait1Periode2">
+                        </div>
+                        <div class="form-group">
+                            <label>Total:</label>
+                            <div class="total-container">
+                                <span id="total2" class="total">0</span> €
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" onclick="calculerTotal()">Calculer Total</button>
+    </div>
+</div>
+
+<script>
+    function calculerTotal() {
+        // Réinitialisation des messages d'erreur et des styles
+        document.getElementById('erreur1').textContent = "";
+
+        // Réinitialisation des couleurs des totaux
+        document.getElementById('total1').classList.remove('total-difference');
+        document.getElementById('total2').classList.remove('total-difference');
+        document.getElementById('offre1').classList.remove('moins-cher');
+        document.getElementById('offre2').classList.remove('moins-cher');
+
+        // Récupération des valeurs pour l'offre 1
+        const prixTel1 = parseFloat(document.getElementById('prixTel1').value) || 0;
+        const remise1 = parseFloat(document.getElementById('remise1').value) || 0;
+        const prixForfait1Periode1 = parseFloat(document.getElementById('prixForfait1Periode1').value) || 0;
+        const dureePeriode1_1 = parseFloat(document.getElementById('dureePeriode1_1').value) || 0;
+        const prixForfait2Periode1 = parseFloat(document.getElementById('prixForfait2Periode1').value) || 0;
+        const dureePeriode2_1 = parseFloat(document.getElementById('dureePeriode2_1').value) || 0;
+
+        // Vérification de la somme des durées
+        const dureeTotale = dureePeriode1_1 + dureePeriode2_1;
+        if (dureeTotale !== 12) {
+            document.getElementById('erreur1').textContent = "La somme des durées doit être strictement égale à 12 mois.";
+            return; // Arrêt de la fonction si la condition n'est pas respectée
+        }
+
+        // Calcul des frais de départ
+        const fraisDepart1 = prixForfait2Periode1 * 4;
+
+        // Calcul du total pour l'offre 1
+        const total1 = (prixTel1 - remise1) + (prixForfait1Periode1 * dureePeriode1_1) + (prixForfait2Periode1 * dureePeriode2_1) + (prixForfait2Periode1 * 4);
+        document.getElementById('total1').textContent = total1.toFixed(2);
+        document.getElementById('fraisDepart1').textContent = fraisDepart1.toFixed(2);
+
+        // Calcul du total pour l'offre 2
+        const prixTel2 = parseFloat(document.getElementById('prixTel2').value) || 0;
+        const remise2 = parseFloat(document.getElementById('remise2').value) || 0;
+        const prixForfait1Periode2 = parseFloat(document.getElementById('prixForfait1Periode2').value) || 0;
+
+        const total2 = (prixTel2 - remise2) + (prixForfait1Periode2 * 12);
+        document.getElementById('total2').textContent = total2.toFixed(2);
+
+        // Comparaison des deux totaux et application de la couleur verte à la colonne la moins chère
+        const colonne1 = document.getElementById('offre1');
+        const colonne2 = document.getElementById('offre2');
+
+        if (total1 < total2) {
+            colonne1.classList.add('moins-cher');
+            document.getElementById('total1').classList.add('total-difference');
+        } else if (total2 < total1) {
+            colonne2.classList.add('moins-cher');
+            document.getElementById('total2').classList.add('total-difference');
+        }
+    }
+
+
+
+</script>
+
+</body>
+</html>
