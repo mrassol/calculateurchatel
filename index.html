@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparaison des Offres</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Inclure Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         .moins-cher {
-            background-color: #ccffcc; /* Vert clair */
+            background-color: #ccffcc;
+            /* Vert clair */
         }
 
         .total-container {
@@ -22,13 +26,15 @@
         }
 
         .total {
-            color: #007bff; /* Couleur bleue pour le total */
+            color: #007bff;
+            /* Couleur bleue pour le total */
         }
 
         .total-difference {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #28a745; /* Couleur verte pour le total le moins cher */
+            color: #28a745;
+            /* Couleur verte pour le total le moins cher */
         }
 
         .toggle-icon {
@@ -44,205 +50,271 @@
         .expanded .toggle-icon {
             transform: rotate(180deg);
         }
+
+        .duration-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .duration-container input {
+            width: 60px;
+            text-align: center;
+            appearance: none;
+            background-color: white;
+            /* Couleur de fond blanche */
+            border: 1px solid #ced4da;
+            cursor: default;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .duration-container .btn {
+            padding: 0 10px;
+            font-size: 1.25rem;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .duration-container .btn:hover {
+            background-color: #f0f0f0;
+            border-color: #007bff;
+        }
+
+        /* Afficher en permanence la scrollbar */
+        body {
+            overflow-y: scroll;
+        }
+
+        /* Animation pour la section repliable */
+        .collapsing {
+            transition: height 0.5s ease;
+        }
     </style>
 </head>
+
 <body class="bg-light">
 
-<div class="container mt-4">
-    <h1 class="text-center">Calculateur Chatel</h1><br>
-    <h3 class="text-center text-muted">Calculé sur 12 mois<br>Impose de lancer une portabilité vers un autre opérateur dès le début du 13<sup>e</sup> mois</h3><br>
-    
-    <!-- Bloc "Comment ça marche" repliable -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h2 class="h5 mb-0">
-                <a class="text-white d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Comment ça marche ?
-                    <span class="toggle-icon" id="toggleIcon">+</span>
-                </a>
-            </h2>
-        </div>
-        <div class="collapse" id="collapseExample">
-            <div class="card-body">
-                <h3>
-                    Voici quelques exemples
-                </h3>
-                <p>
-                    Pour un opérateur qui augmente le prix après les 12 premiers mois (SFR par exemple) :
-                </p>
-                <ul>
-                    <li><strong>Prix première période :</strong> Prix année 1</li>
-                    <li><strong>Durée :</strong> 12 mois</li>
-                    <li><strong>Prix deuxième période :</strong> Prix année 2</li>
-                    <li><strong>Durée :</strong> 0 mois</li>
-                </ul>
-                <p>
-                    Pour un prix constant sur les 24 mois :
-                </p>
-                <ul>
-                    <li><strong>Prix première période :</strong> Prix année 1</li>
-                    <li><strong>Durée :</strong> 12 mois</li>
-                    <li><strong>Prix deuxième période :</strong> Prix année 1</li>
-                    <li><strong>Durée :</strong> 0 mois</li>
-                </ul>
-                <p>
-                    Pour un prix qui augmente au bout de 6 mois (Orange par exemple) :
-                </p>
-                <ul>
-                    <li><strong>Prix première période :</strong> Prix 6 premiers mois</li>
-                    <li><strong>Durée :</strong> 6 mois</li>
-                    <li><strong>Prix deuxième période :</strong> Prix 6 autres mois</li>
-                    <li><strong>Durée :</strong> 6 mois</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- Fin du bloc "Comment ça marche" -->
+    <div class="container mt-4">
+        <h1 class="text-center">Calculateur Chatel</h1><br>
+        <h3 class="text-center text-muted">Calculé sur 12 mois<br>Impose de lancer une portabilité vers un autre opérateur dès le début du 13<sup>e</sup> mois</h3><br>
 
-    <div class="row mt-4">
-        <div class="col-md-6 mb-4">
-            <div class="card" id="offre1">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="h5">Offre avec engagement</h2>
-                </div>
+        <!-- Bloc "Comment ça marche" repliable -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">
+                    <a class="text-white d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Comment ça marche ?
+                        <span class="toggle-icon" id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+                    </a>
+                </h2>
+            </div>
+            <div class="collapse" id="collapseExample">
                 <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="prixTel1">Prix du téléphone:</label>
-                            <input type="number" class="form-control" id="prixTel1">
-                        </div>
-                        <div class="form-group">
-                            <label for="remise1">Remise:</label>
-                            <input type="number" class="form-control" id="remise1">
-                        </div>
-                        <div class="form-group">
-                            <label for="prixForfait1Periode1">Prix forfait mensuel première période:</label>
-                            <input type="number" class="form-control" id="prixForfait1Periode1">
-                        </div>
-                        <div class="form-group">
-                            <label for="dureePeriode1_1">Durée première période (mois):</label>
-                            <input type="number" class="form-control" id="dureePeriode1_1">
-                        </div>
-                        <div class="form-group">
-                            <label for="prixForfait2Periode1">Prix forfait mensuel deuxième période:</label>
-                            <input type="number" class="form-control" id="prixForfait2Periode1">
-                        </div>
-                        <div class="form-group">
-                            <label for="dureePeriode2_1">Durée deuxième période (mois):</label>
-                            <input type="number" class="form-control" id="dureePeriode2_1">
-                        </div>
-                        <div class="form-group">
-                            <label>Total:</label>
-                            <div class="total-container">
-                                <span id="total1" class="total">0</span> €
-                                <br>
-                                <small class="frais-depart">dont <span id="fraisDepart1">0</span> € de frais de départ</small>
+                    <h3>Voici quelques exemples</h3>
+                    <p>Pour un opérateur qui augmente le prix après les 12 premiers mois (SFR par exemple) :</p>
+                    <ul>
+                        <li><strong>Prix première période :</strong> Prix année 1</li>
+                        <li><strong>Durée :</strong> 12 mois</li>
+                        <li><strong>Prix deuxième période :</strong> Prix année 2</li>
+                        <li><strong>Durée :</strong> 0 mois</li>
+                    </ul>
+                    <p>Pour un prix constant sur les 24 mois :</p>
+                    <ul>
+                        <li><strong>Prix première période :</strong> Prix année 1</li>
+                        <li><strong>Durée :</strong> 12 mois</li>
+                        <li><strong>Prix deuxième période :</strong> Prix année 1</li>
+                        <li><strong>Durée :</strong> 0 mois</li>
+                    </ul>
+                    <p>Pour un prix qui augmente au bout de 6 mois (Orange par exemple) :</p>
+                    <ul>
+                        <li><strong>Prix première période :</strong> Prix 6 premiers mois</li>
+                        <li><strong>Durée :</strong> 6 mois</li>
+                        <li><strong>Prix deuxième période :</strong> Prix 6 autres mois</li>
+                        <li><strong>Durée :</strong> 6 mois</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Fin du bloc "Comment ça marche" -->
+
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card" id="offre1">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h5">Offre avec engagement</h2>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="prixTel1">Prix du téléphone:</label>
+                                <input type="number" class="form-control" id="prixTel1">
                             </div>
-                        </div>
-                        <div id="erreur1" class="text-danger"></div>
-                    </form>
+                            <div class="form-group">
+                                <label for="remise1">Remise:</label>
+                                <input type="number" class="form-control" id="remise1">
+                            </div>
+                            <div class="form-group">
+                                <label for="prixForfait1Periode1">Prix forfait mensuel première période:</label>
+                                <input type="number" class="form-control" id="prixForfait1Periode1">
+                            </div>
+                            <div class="form-group">
+                                <label>Durée première période (mois):</label>
+                                <div class="duration-container">
+                                    <button type="button" class="btn btn-outline-primary" id="decrement1" onclick="decrementValue('dureePeriode1_1', 'dureePeriode2_1')">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <input type="number" class="form-control" id="dureePeriode1_1" value="12" readonly>
+                                    <button type="button" class="btn btn-outline-primary" id="increment1" onclick="incrementValue('dureePeriode1_1', 'dureePeriode2_1')">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="prixForfait2Periode1">Prix forfait mensuel deuxième période:</label>
+                                <input type="number" class="form-control" id="prixForfait2Periode1">
+                            </div>
+                            <div class="form-group">
+                                <label>Durée deuxième période (mois):</label>
+                                <div class="duration-container">
+                                    <button type="button" class="btn btn-outline-primary" id="decrement2" onclick="decrementValue('dureePeriode2_1', 'dureePeriode1_1')">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <input type="number" class="form-control" id="dureePeriode2_1" value="0" readonly>
+                                    <button type="button" class="btn btn-outline-primary" id="increment2" onclick="incrementValue('dureePeriode2_1', 'dureePeriode1_1')">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Total:</label>
+                                <div class="total-container">
+                                    <span id="total1" class="total">0</span> €
+                                    <br>
+                                    <small class="frais-depart">dont <span id="fraisDepart1">0</span> € de frais de départ</small>
+                                </div>
+                            </div>
+                            <div id="erreur1" class="text-danger"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card" id="offre2">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h5">Offre sans engagement</h2>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="prixTel2">Prix du téléphone:</label>
+                                <input type="number" class="form-control" id="prixTel2">
+                            </div>
+                            <div class="form-group">
+                                <label for="remise2">Remise:</label>
+                                <input type="number" class="form-control" id="remise2">
+                            </div>
+                            <div class="form-group">
+                                <label for="prixForfait1Periode2">Prix forfait mensuel:</label>
+                                <input type="number" class="form-control" id="prixForfait1Periode2">
+                            </div>
+                            <div class="form-group">
+                                <label>Total:</label>
+                                <div class="total-container">
+                                    <span id="total2" class="total">0</span> €
+                                </div>
+                            </div>
+                            <div id="erreur2" class="text-danger"></div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <div class="card" id="offre2">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="h5">Offre mobile nu + forfait sans engagement</h2>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="prixTel2">Prix du téléphone:</label>
-                            <input type="number" class="form-control" id="prixTel2">
-                        </div>
-                        <div class="form-group">
-                            <label for="remise2">Remise:</label>
-                            <input type="number" class="form-control" id="remise2">
-                        </div>
-                        <div class="form-group">
-                            <label for="prixForfait1Periode2">Prix forfait mensuel:</label>
-                            <input type="number" class="form-control" id="prixForfait1Periode2">
-                        </div>
-                        <div class="form-group">
-                            <label>Total:</label>
-                            <div class="total-container">
-                                <span id="total2" class="total">0</span> €
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <!-- Bouton de calcul des totaux -->
+        <div class="text-center">
+            <button type="button" class="btn btn-primary btn-lg" onclick="calculateTotals()">Calculer total</button>
         </div>
     </div>
 
-    <div class="text-center">
-        <button class="btn btn-primary" onclick="calculerTotal()">Calculer Total</button>
-    </div>
-</div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function decrementValue(id1, id2) {
+            const input1 = document.getElementById(id1);
+            const input2 = document.getElementById(id2);
+            let value1 = parseInt(input1.value);
+            let value2 = parseInt(input2.value);
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function calculerTotal() {
-        // Réinitialisation des messages d'erreur et des styles
-        document.getElementById('erreur1').textContent = "";
-
-        // Réinitialisation des couleurs des totaux
-        document.getElementById('total1').classList.remove('total-difference');
-        document.getElementById('total2').classList.remove('total-difference');
-        document.getElementById('offre1').classList.remove('moins-cher');
-        document.getElementById('offre2').classList.remove('moins-cher');
-
-        // Récupération des valeurs pour l'offre 1
-        const prixTel1 = parseFloat(document.getElementById('prixTel1').value) || 0;
-        const remise1 = parseFloat(document.getElementById('remise1').value) || 0;
-        const prixForfait1Periode1 = parseFloat(document.getElementById('prixForfait1Periode1').value) || 0;
-        const dureePeriode1_1 = parseFloat(document.getElementById('dureePeriode1_1').value) || 0;
-        const prixForfait2Periode1 = parseFloat(document.getElementById('prixForfait2Periode1').value) || 0;
-        const dureePeriode2_1 = parseFloat(document.getElementById('dureePeriode2_1').value) || 0;
-
-        // Vérification de la somme des durées
-        const dureeTotale = dureePeriode1_1 + dureePeriode2_1;
-        if (dureeTotale !== 12) {
-            document.getElementById('erreur1').textContent = "La somme des durées doit être strictement égale à 12 mois.";
-            return; // Arrêt de la fonction si la condition n'est pas respectée
+            if (value1 > 0) {
+                input1.value = --value1;
+                input2.value = ++value2;
+            }
         }
 
-        // Calcul des frais de départ
-        const fraisDepart1 = prixForfait2Periode1 * 3;
+        function incrementValue(id1, id2) {
+            const input1 = document.getElementById(id1);
+            const input2 = document.getElementById(id2);
+            let value1 = parseInt(input1.value);
+            let value2 = parseInt(input2.value);
 
-        // Calcul du total pour l'offre 1
-        const total1 = (prixTel1 - remise1) + (prixForfait1Periode1 * dureePeriode1_1) + (prixForfait2Periode1 * dureePeriode2_1) + fraisDepart1;
-        document.getElementById('total1').textContent = total1.toFixed(2);
-        document.getElementById('fraisDepart1').textContent = fraisDepart1.toFixed(2);
-
-        // Récupération des valeurs pour l'offre 2
-        const prixTel2 = parseFloat(document.getElementById('prixTel2').value) || 0;
-        const remise2 = parseFloat(document.getElementById('remise2').value) || 0;
-        const prixForfait1Periode2 = parseFloat(document.getElementById('prixForfait1Periode2').value) || 0;
-
-        // Calcul du total pour l'offre 2
-        const total2 = (prixTel2 - remise2) + (prixForfait1Periode2 * 12);
-        document.getElementById('total2').textContent = total2.toFixed(2);
-
-        // Comparaison des totaux pour déterminer le moins cher
-        if (total1 < total2) {
-            document.getElementById('total1').classList.add('total-difference');
-            document.getElementById('offre1').classList.add('moins-cher');
-        } else if (total2 < total1) {
-            document.getElementById('total2').classList.add('total-difference');
-            document.getElementById('offre2').classList.add('moins-cher');
+            if (value2 > 0) {
+                input1.value = ++value1;
+                input2.value = --value2;
+            }
         }
-    }
-	
-	    // Script pour changer le symbole + / - lors du pliage ou dépliage
-    $('#collapseExample').on('shown.bs.collapse', function () {
-        $('#toggleIcon').text('-');
-    });
-    $('#collapseExample').on('hidden.bs.collapse', function () {
-        $('#toggleIcon').text('+');
-    });
-</script>
+
+        function calculateTotals() {
+            const prixTel1 = parseFloat(document.getElementById('prixTel1').value) || 0;
+            const remise1 = parseFloat(document.getElementById('remise1').value) || 0;
+            const prixForfait1Periode1 = parseFloat(document.getElementById('prixForfait1Periode1').value) || 0;
+            const dureePeriode1_1 = parseFloat(document.getElementById('dureePeriode1_1').value) || 0;
+            const prixForfait2Periode1 = parseFloat(document.getElementById('prixForfait2Periode1').value) || 0;
+            const dureePeriode2_1 = parseFloat(document.getElementById('dureePeriode2_1').value) || 0;
+
+            const fraisDepart1 = prixForfait2Periode1 * 3;
+
+            const total1 = (prixTel1 - remise1) + (prixForfait1Periode1 * dureePeriode1_1) + (prixForfait2Periode1 * dureePeriode2_1) + fraisDepart1;
+            document.getElementById('total1').textContent = total1.toFixed(2);
+            document.getElementById('fraisDepart1').textContent = fraisDepart1.toFixed(2);
+
+            const prixTel2 = parseFloat(document.getElementById('prixTel2').value) || 0;
+            const remise2 = parseFloat(document.getElementById('remise2').value) || 0;
+            const prixForfait1Periode2 = parseFloat(document.getElementById('prixForfait1Periode2').value) || 0;
+
+            const total2 = (prixTel2 - remise2) + (prixForfait1Periode2 * 12);
+            document.getElementById('total2').textContent = total2.toFixed(2);
+
+            if (total1 < total2) {
+                document.getElementById('total1').classList.add('total-difference');
+                document.getElementById('offre1').classList.add('moins-cher');
+                document.getElementById('total2').classList.remove('total-difference');
+                document.getElementById('offre2').classList.remove('moins-cher');
+            } else if (total2 < total1) {
+                document.getElementById('total2').classList.add('total-difference');
+                document.getElementById('offre2').classList.add('moins-cher');
+                document.getElementById('total1').classList.remove('total-difference');
+                document.getElementById('offre1').classList.remove('moins-cher');
+            } else {
+                document.getElementById('total1').classList.remove('total-difference');
+                document.getElementById('offre1').classList.remove('moins-cher');
+                document.getElementById('total2').classList.remove('total-difference');
+                document.getElementById('offre2').classList.remove('moins-cher');
+            }
+        }
+
+        $('#collapseExample').on('shown.bs.collapse', function () {
+            $('#toggleIcon').html('<i class="fas fa-chevron-up"></i>');
+        });
+        $('#collapseExample').on('hidden.bs.collapse', function () {
+            $('#toggleIcon').html('<i class="fas fa-chevron-down"></i>');
+        });
+    </script>
 </body>
+
 </html>
